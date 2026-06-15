@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Sound of Your Pet — Madam Aylak</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&family=Inter:wght@500;600&family=Great+Vibes&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;background:radial-gradient(120% 80% at 50% 0%,#f7efe0,#ecdfc7);
+font-family:Inter;display:flex;flex-direction:column;align-items:center;justify-content:center;
+padding:48px 24px;color:#3a2e23;text-align:center;}
+.logo{font-weight:600;letter-spacing:.32em;font-size:12px;color:#8a7d68;text-transform:uppercase;position:fixed;top:38px;}
+.kick{font-weight:600;letter-spacing:.4em;font-size:12px;color:#8a7d68;text-transform:uppercase;margin-bottom:4px;}
+.name{font-family:'Great Vibes';font-size:72px;line-height:1;}
+.phrase{font-family:'Playfair Display';font-style:italic;font-size:19px;color:#c4744e;margin:4px 0 38px;}
+.wave{display:flex;align-items:center;gap:4px;height:110px;margin-bottom:40px;}
+.wave span{width:6px;border-radius:3px;background:#c4744e;transition:transform .12s;}
+.play{width:104px;height:104px;border-radius:50%;background:#c4744e;border:none;cursor:pointer;
+display:flex;align-items:center;justify-content:center;box-shadow:0 12px 30px rgba(196,116,78,.4);}
+.tri{width:0;height:0;border-left:32px solid #fff;border-top:20px solid transparent;border-bottom:20px solid transparent;margin-left:8px;}
+.tap{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#8a7d68;margin-top:20px;}
+.foot{position:fixed;bottom:32px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#b0a48c;}
+</style></head><body>
+<div class="logo">Madam Aylak</div>
+<div class="kick">The Sound Of</div><div class="name" id="name">Your Pet</div>
+<div class="phrase" id="phrase"></div>
+<div class="wave" id="w"></div>
+<button class="play" id="p"><span class="tri"></span></button>
+<div class="tap" id="t">Tap to play</div>
+<div class="foot">scan &middot; listen &middot; remember</div>
+<audio id="a" preload="auto"></audio>
+<script>
+const q=new URLSearchParams(location.search);
+document.getElementById('name').textContent=q.get('name')||'Your Pet';
+document.getElementById('phrase').textContent=q.get('phrase')||'';
+const a=document.getElementById('a');a.src=q.get('audio')||'';
+const hs=[30,55,80,110,95,60,40,70,100,85,50,35,60,90,115,100,70,45,30,55,80,60,40];
+const w=document.getElementById('w');hs.forEach(h=>{const s=document.createElement('span');s.style.height=h+'px';s.style.opacity=(.4+h/150);w.appendChild(s);});
+const p=document.getElementById('p'),t=document.getElementById('t');let iv;
+p.onclick=()=>{if(a.paused){a.play();t.textContent='Playing…';iv=setInterval(()=>{[...w.children].forEach(s=>s.style.transform='scaleY('+(0.6+Math.random()*0.8)+')')},120);}else{a.pause();a.currentTime=0;}};
+a.onended=a.onpause=()=>{t.textContent='Tap to play';clearInterval(iv);[...w.children].forEach(s=>s.style.transform='');};
+</script></body></html>
