@@ -28,10 +28,12 @@ display:flex;align-items:center;justify-content:center;box-shadow:0 12px 30px rg
 <div class="foot">scan &middot; listen &middot; remember</div>
 <audio id="a" preload="auto"></audio>
 <script>
+const SB='https://frpfibrdjhpbemjutnwo.supabase.co/storage/v1/object/public/pet-sounds/';
 const q=new URLSearchParams(location.search);
-document.getElementById('name').textContent=q.get('name')||'Your Pet';
-document.getElementById('phrase').textContent=q.get('phrase')||'';
-const a=document.getElementById('a');a.src=q.get('audio')||'';
+document.getElementById('name').textContent=q.get('n')||q.get('name')||'Your Pet';
+document.getElementById('phrase').textContent=q.get('p')||q.get('phrase')||'';
+const a=document.getElementById('a');
+a.src=q.get('s')?(SB+q.get('s')+'/sound.mp3'):(q.get('audio')||'');
 const hs=[30,55,80,110,95,60,40,70,100,85,50,35,60,90,115,100,70,45,30,55,80,60,40];
 const w=document.getElementById('w');hs.forEach(h=>{const s=document.createElement('span');s.style.height=h+'px';s.style.opacity=(.4+h/150);w.appendChild(s);});
 const p=document.getElementById('p'),t=document.getElementById('t');let iv;
