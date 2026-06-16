@@ -2,76 +2,76 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Meet My Pet — Madam Aylak</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Inter:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Cormorant+Garamond:ital@1&family=Inter:wght@500;600&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;}
 body{min-height:100vh;background:radial-gradient(120% 80% at 50% 0%,#f4eedd,#e9ddc2);
 font-family:Inter;color:#332c22;display:flex;flex-direction:column;align-items:center;
-padding:46px 18px 56px;text-align:center;overflow-x:hidden;}
-.logo{font-weight:600;letter-spacing:.32em;font-size:11px;color:#9a8c72;text-transform:uppercase;margin-bottom:18px;}
-.kick{font-weight:600;letter-spacing:.46em;font-size:11px;color:#9a8c72;text-transform:uppercase;text-indent:.46em;margin-bottom:18px;}
-.pho{width:min(180px,46vw);height:min(180px,46vw);border-radius:50%;object-fit:cover;object-position:50% 38%;
-border:5px solid #fff;box-shadow:0 8px 22px rgba(51,44,34,.2);margin-bottom:18px;flex:none;display:none;}
-.name{font-family:'Playfair Display';font-weight:700;font-size:54px;line-height:1;}
-.breed{font-family:'Cormorant Garamond';font-style:italic;font-size:22px;color:#bf6a43;margin-top:4px;}
-.play{margin:24px 0 6px;width:74px;height:74px;border-radius:50%;background:#bf6a43;border:none;cursor:pointer;
-display:none;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(191,106,67,.4);}
-.tri{width:0;height:0;border-left:22px solid #fff;border-top:14px solid transparent;border-bottom:14px solid transparent;margin-left:6px;}
-.tap{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#9a8c72;margin-bottom:6px;display:none;}
-.cols{width:100%;max-width:430px;margin-top:26px;}
-.sect{margin-bottom:22px;}
-.ct{font-weight:600;letter-spacing:.24em;font-size:12px;text-transform:uppercase;color:#bf6a43;
-padding-bottom:8px;margin-bottom:6px;border-bottom:1.5px solid rgba(191,106,67,.4);text-align:left;}
-.r{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:9px 0;}
-.rl{font-weight:500;font-size:15px;color:#9a8c72;text-align:left;}
-.rv{font-family:'Cormorant Garamond';font-weight:600;font-size:20px;color:#332c22;text-align:right;}
-.traits{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:6px 0 0;}
-.pill{font-weight:600;font-size:14px;color:#332c22;border:1.5px solid #bf6a43;border-radius:30px;padding:8px 18px;background:#fff8;}
-.motto{font-family:'Cormorant Garamond';font-style:italic;font-size:21px;line-height:1.45;color:#332c22;max-width:420px;margin:28px 0 0;}
-.foot{margin-top:34px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#b3a98f;}
+padding:42px 0 50px;text-align:center;overflow-x:hidden;}
+.logo{font-weight:600;letter-spacing:.32em;font-size:11px;color:#9a8c72;text-transform:uppercase;margin-bottom:6px;}
+.name{font-family:'Playfair Display';font-weight:700;font-size:46px;line-height:1;}
+.breed{font-family:'Cormorant Garamond';font-style:italic;font-size:20px;color:#bf6a43;margin-top:2px;margin-bottom:22px;}
+/* kaydirilabilir albüm */
+.gal{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;width:100%;
+padding:4px 22px 14px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.gal::-webkit-scrollbar{display:none;}
+.slide{flex:none;width:min(82vw,360px);aspect-ratio:4/5;scroll-snap-align:center;border-radius:18px;
+overflow:hidden;box-shadow:0 10px 28px rgba(51,44,34,.22);background:#e0d4ba;border:5px solid #fff;}
+.slide img{width:100%;height:100%;object-fit:cover;display:block;}
+.dots{display:flex;gap:7px;justify-content:center;margin:6px 0 4px;}
+.dot{width:7px;height:7px;border-radius:50%;background:#cdbf9f;transition:.2s;}
+.dot.on{background:#bf6a43;width:20px;border-radius:4px;}
+.swipe{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#9a8c72;margin-top:2px;}
+.play{margin:26px 0 6px;width:84px;height:84px;border-radius:50%;background:#bf6a43;border:none;cursor:pointer;
+display:none;align-items:center;justify-content:center;box-shadow:0 12px 28px rgba(191,106,67,.42);}
+.tri{width:0;height:0;border-left:24px solid #fff;border-top:15px solid transparent;border-bottom:15px solid transparent;margin-left:6px;}
+.wave{display:none;align-items:center;gap:4px;height:34px;margin-top:14px;}
+.wave span{width:4px;border-radius:3px;background:#bf6a43;transition:transform .12s;}
+.tap{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#9a8c72;margin-top:14px;display:none;}
+.foot{margin-top:30px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#b3a98f;}
+audio{display:none;}
 </style></head><body>
 <div class="logo">Madam Aylak</div>
-<div class="kick">All About</div>
-<img class="pho" id="pho">
 <div class="name" id="name">Your Pet</div>
 <div class="breed" id="breed"></div>
+<div class="gal" id="gal"></div>
+<div class="dots" id="dots"></div>
+<div class="swipe" id="swipe"></div>
 <button class="play" id="play"><span class="tri"></span></button>
-<div class="tap" id="tap">Tap to hear them</div>
-<div class="cols" id="cols"></div>
-<div class="traits" id="traits"></div>
-<div class="motto" id="motto"></div>
-<div class="foot">Madam Aylak &middot; The Official File</div>
+<div class="wave" id="wave"></div>
+<div class="tap" id="tap"></div>
+<div class="foot">Madam Aylak &middot; Scan &middot; Listen &middot; Remember</div>
 <audio id="a" preload="auto"></audio>
 <script>
 const SB='https://frpfibrdjhpbemjutnwo.supabase.co/storage/v1/object/public/pet-sounds/';
 const q=new URLSearchParams(location.search);
 const slug=q.get('s')||'';
 const $=id=>document.getElementById(id);
-function rows(title,arr){
-  if(!arr||!arr.length)return'';
-  let h='<div class="sect"><div class="ct">'+title+'</div>';
-  arr.forEach(([l,v])=>{if(v)h+='<div class="r"><span class="rl">'+l+'</span><span class="rv">'+v+'</span></div>';});
-  return h+'</div>';
-}
 async function load(){
   if(!slug)return;
-  // foto
-  const im=$('pho');im.onload=()=>im.style.display='block';im.src=SB+slug+'/photo.jpg';
-  try{
-    const r=await fetch(SB+slug+'/profile.json',{cache:'no-store'});
-    const d=await r.json();
-    if(d.name)$('name').textContent=d.name;
-    if(d.breed)$('breed').textContent=d.breed;
-    $('cols').innerHTML=rows('Profile',d.profile)+rows('Favourites',d.favs);
-    if(d.traits)$('traits').innerHTML=d.traits.map(t=>'<span class="pill">'+t+'</span>').join('');
-    if(d.motto)$('motto').textContent='“'+d.motto+'”';
-    if(d.sound){
-      const a=$('a');a.src=SB+slug+'/sound.mp3';
-      $('play').style.display='flex';$('tap').style.display='block';
-      $('play').onclick=()=>{if(a.paused){a.play();$('tap').textContent='Playing…';}else{a.pause();a.currentTime=0;}};
-      a.onended=a.onpause=()=>$('tap').textContent='Tap to hear '+(d.name||'them');
-      $('tap').textContent='Tap to hear '+(d.name||'them');
-    }
-  }catch(e){}
+  let d; try{ d=await (await fetch(SB+slug+'/profile.json',{cache:'no-store'})).json(); }catch(e){return;}
+  if(d.name)$('name').textContent=d.name;
+  if(d.breed)$('breed').textContent=d.breed;
+  const photos=d.photos||[];
+  const gal=$('gal'),dots=$('dots');
+  photos.forEach((ph,i)=>{
+    gal.insertAdjacentHTML('beforeend',`<div class="slide"><img src="${SB+slug+'/'+ph}"></div>`);
+    dots.insertAdjacentHTML('beforeend',`<div class="dot${i===0?' on':''}"></div>`);
+  });
+  if(photos.length>1){$('swipe').textContent='swipe through '+photos.length+' photos';
+    gal.addEventListener('scroll',()=>{const i=Math.round(gal.scrollLeft/(gal.firstChild.offsetWidth+14));
+      [...dots.children].forEach((x,k)=>x.classList.toggle('on',k===i));});}
+  if(d.sound){
+    const a=$('a');a.src=SB+slug+'/sound.mp3';
+    $('play').style.display='flex';$('tap').style.display='block';$('wave').style.display='flex';
+    const hs=[14,24,34,28,18,30,22,16,26,32,20,14,24,30,18];
+    hs.forEach(h=>{const s=document.createElement('span');s.style.height=h+'px';$('wave').appendChild(s);});
+    let iv;$('tap').textContent='Tap to hear '+(d.name||'them');
+    $('play').onclick=()=>{if(a.paused){a.play();$('tap').textContent='Playing…';
+      iv=setInterval(()=>{[...$('wave').children].forEach(s=>s.style.transform='scaleY('+(0.5+Math.random())+')')},120);}
+      else{a.pause();a.currentTime=0;}};
+    a.onended=a.onpause=()=>{$('tap').textContent='Tap to hear '+(d.name||'them');clearInterval(iv);
+      [...$('wave').children].forEach(s=>s.style.transform='');};
+  }
 }
 load();
 </script></body></html>
