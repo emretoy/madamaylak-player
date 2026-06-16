@@ -1,0 +1,64 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Their Adventures — Madam Aylak</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Cormorant+Garamond:ital@0;1&family=Inter:wght@500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;font-family:Inter;}
+#map{position:absolute;inset:0;background:#f1e7d0;}
+.hdr{position:absolute;top:0;left:0;right:0;z-index:1000;text-align:center;pointer-events:none;
+padding:16px 16px 30px;background:linear-gradient(180deg,rgba(244,238,221,.96) 40%,rgba(244,238,221,0));}
+.logo{font-weight:600;letter-spacing:.32em;font-size:10px;color:#9a8c72;text-transform:uppercase;}
+.name{font-family:'Playfair Display';font-weight:700;font-size:34px;color:#3a3020;line-height:1.05;margin-top:2px;}
+.stats{display:flex;gap:18px;justify-content:center;margin-top:8px;}
+.stat b{font-family:'Playfair Display';font-size:20px;color:#bf6a43;}
+.stat span{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#9a8c72;display:block;margin-top:1px;}
+.hint{position:absolute;bottom:20px;left:0;right:0;z-index:1000;text-align:center;pointer-events:none;
+font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#7a6f58;}
+.pin{width:54px;height:54px;border-radius:50%;border:3px solid #fff;box-shadow:0 4px 12px rgba(58,48,32,.4);
+object-fit:cover;background:#bf6a43;}
+.pindot{width:18px;height:18px;border-radius:50%;background:#bf6a43;border:3px solid #fff;box-shadow:0 3px 8px rgba(58,48,32,.4);}
+.leaflet-popup-content-wrapper{border-radius:12px;}
+.pop img{width:200px;height:150px;object-fit:cover;border-radius:8px;display:block;}
+.pop .pl{font-family:'Playfair Display';font-weight:600;font-size:16px;color:#3a3020;text-align:center;margin-top:7px;}
+.foot{position:absolute;bottom:0;left:0;right:0;z-index:1000;text-align:center;pointer-events:none;
+font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:#9a8c72;padding:6px;
+background:linear-gradient(0deg,rgba(244,238,221,.9),transparent);}
+</style></head><body>
+<div id="map"></div>
+<div class="hdr"><div class="logo">Madam Aylak</div><div class="name" id="name">Their Adventures</div><div class="stats" id="stats"></div></div>
+<div class="hint" id="hint">tap a photo to relive the moment</div>
+<div class="foot">Madam Aylak &middot; Real Places</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const SB='https://frpfibrdjhpbemjutnwo.supabase.co/storage/v1/object/public/pet-sounds/';
+const q=new URLSearchParams(location.search);
+const slug=q.get('s')||'';
+const map=L.map('map',{zoomControl:false,attributionControl:false}).setView([40,15],4);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:19,subdomains:'abcd'}).addTo(map);
+L.control.attribution({prefix:false,position:'bottomright'}).addAttribution('© OpenStreetMap, © CARTO').addTo(map);
+async function load(){
+  if(!slug)return;
+  let d; try{ d=await (await fetch(SB+slug+'/journey.json',{cache:'no-store'})).json(); }catch(e){return;}
+  if(d.name)document.getElementById('name').textContent=d.name+"'s Adventures";
+  if(d.stats){const s=d.stats;document.getElementById('stats').innerHTML=
+    `<div class="stat"><b>${s.places}</b><span>places</span></div>`+
+    `<div class="stat"><b>${s.countries}</b><span>countries</span></div>`+
+    (s.km?`<div class="stat"><b>${s.km.toLocaleString()}</b><span>km</span></div>`:'');}
+  const pts=[];
+  const line=[];
+  (d.places||[]).forEach(pl=>{
+    const ll=[pl.lat,pl.lon]; pts.push(ll); line.push(ll);
+    let icon;
+    if(pl.photo){icon=L.divIcon({className:'',html:`<img class="pin" src="${SB+slug+'/'+pl.photo}">`,iconSize:[54,54],iconAnchor:[27,27]});}
+    else{icon=L.divIcon({className:'',html:'<div class="pindot"></div>',iconSize:[18,18],iconAnchor:[9,9]});}
+    const m=L.marker(ll,{icon}).addTo(map);
+    const ph=pl.photo?`<img src="${SB+slug+'/'+pl.photo}">`:'';
+    m.bindPopup(`<div class="pop">${ph}<div class="pl">${pl.label||''}</div></div>`);
+  });
+  if(line.length>1)L.polyline(line,{color:'#bf6a43',weight:2,dashArray:'2 8',opacity:.8}).addTo(map);
+  if(pts.length){map.fitBounds(pts,{padding:[90,70]});}
+}
+load();
+</script></body></html>
