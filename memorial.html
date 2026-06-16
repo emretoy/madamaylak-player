@@ -1,0 +1,63 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>In Loving Memory — Madam Aylak</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@0;1&family=Inter:wght@500;600&family=Great+Vibes&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;background:radial-gradient(120% 80% at 50% 0%,#f4efe3,#e7dfcd);
+font-family:Inter;display:flex;flex-direction:column;align-items:center;justify-content:center;
+padding:56px 24px;color:#4a443a;text-align:center;}
+.logo{font-weight:600;letter-spacing:.32em;font-size:11px;color:#9a8f78;text-transform:uppercase;position:fixed;top:34px;}
+.kick{font-weight:600;letter-spacing:.46em;font-size:11px;color:#9a8f78;text-transform:uppercase;text-indent:.46em;margin-bottom:18px;}
+.pho{width:148px;height:148px;border-radius:50%;object-fit:cover;object-position:50% 40%;
+border:5px solid #fff;box-shadow:0 8px 22px rgba(74,68,58,.24);margin-bottom:22px;
+filter:grayscale(.28) sepia(.14) brightness(1.04);display:none;}
+.name{font-family:'Great Vibes';font-size:68px;line-height:1;color:#4a443a;}
+.subt{font-weight:600;letter-spacing:.34em;font-size:11px;color:#9a8f78;text-transform:uppercase;text-indent:.34em;margin-top:4px;}
+.dates{display:flex;align-items:center;gap:16px;margin:16px 0 4px;}
+.dates .d{font-family:'Cormorant Garamond';font-size:26px;color:#6f685b;}
+.dates .dash{width:30px;height:1.2px;background:#bda05c;opacity:.85;}
+.wave{display:flex;align-items:center;gap:4px;height:92px;margin:30px 0 30px;}
+.wave span{width:5px;border-radius:3px;background:#7f8c77;transition:transform .12s;}
+.play{width:96px;height:96px;border-radius:50%;background:#7f8c77;border:none;cursor:pointer;
+display:flex;align-items:center;justify-content:center;box-shadow:0 12px 28px rgba(127,140,119,.4);}
+.tri{width:0;height:0;border-left:28px solid #fff;border-top:18px solid transparent;border-bottom:18px solid transparent;margin-left:7px;}
+.tap{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#9a8f78;margin-top:18px;}
+.verse{font-family:'Cormorant Garamond';font-style:italic;font-size:22px;line-height:1.5;color:#6f685b;max-width:420px;margin:34px 0 0;}
+.until{font-family:'Great Vibes';font-size:38px;color:#7f8c77;margin-top:20px;line-height:1;}
+.foot{position:fixed;bottom:30px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#b3a98f;}
+</style></head><body>
+<div class="logo">Madam Aylak</div>
+<div class="kick">In Loving Memory</div>
+<img class="pho" id="pho">
+<div class="name" id="name">Your Pet</div>
+<div class="subt" id="subt"></div>
+<div class="dates" id="dwrap" style="display:none"><span class="d" id="born"></span><span class="dash"></span><span class="d" id="passed"></span></div>
+<div class="wave" id="w"></div>
+<button class="play" id="p"><span class="tri"></span></button>
+<div class="tap" id="t">Tap to hear them</div>
+<div class="verse" id="verse"></div>
+<div class="until" id="until">until we meet again</div>
+<div class="foot" id="foot">forever in our hearts</div>
+<audio id="a" preload="auto"></audio>
+<script>
+const SB='https://frpfibrdjhpbemjutnwo.supabase.co/storage/v1/object/public/pet-sounds/';
+const q=new URLSearchParams(location.search);
+const slug=q.get('s')||'';
+const $=id=>document.getElementById(id);
+$('name').textContent=q.get('n')||'Your Pet';
+if(q.get('st')){$('subt').textContent=q.get('st');}
+if(q.get('b')&&q.get('d')){$('born').textContent=q.get('b');$('passed').textContent=q.get('d');$('dwrap').style.display='flex';}
+if(q.get('v')){$('verse').innerHTML=q.get('v').replace(/\|/g,'<br>');}
+if(q.get('u')){$('until').textContent=q.get('u');}
+if(q.get('o')){$('foot').textContent='forever in our hearts · '+q.get('o');}
+const a=$('a');
+a.src=slug?(SB+slug+'/sound.mp3'):(q.get('audio')||'');
+// foto varsa goster (sessizce dener)
+if(slug){const im=$('pho');im.onload=()=>im.style.display='block';im.src=SB+slug+'/photo.jpg';}
+const hs=[24,44,64,88,76,48,32,56,80,68,40,28,48,72,92,80,56,36,24,44,64,48,32];
+const w=$('w');hs.forEach(h=>{const s=document.createElement('span');s.style.height=h+'px';s.style.opacity=(.4+h/130);w.appendChild(s);});
+const p=$('p'),t=$('t');let iv;
+p.onclick=()=>{if(a.paused){a.play();t.textContent='Playing…';iv=setInterval(()=>{[...w.children].forEach(s=>s.style.transform='scaleY('+(0.6+Math.random()*0.8)+')')},120);}else{a.pause();a.currentTime=0;}};
+a.onended=a.onpause=()=>{t.textContent='Tap to hear them';clearInterval(iv);[...w.children].forEach(s=>s.style.transform='');};
+</script></body></html>
