@@ -1,0 +1,52 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Madam Aylak — Sipariş Linki Üretici</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&family=Inter:wght@500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;background:#f4ece0;font-family:Inter;color:#3a2e23;padding:46px 22px;display:flex;flex-direction:column;align-items:center;}
+.logo{font-weight:600;letter-spacing:.3em;font-size:12px;color:#8a7d68;text-transform:uppercase;margin-bottom:16px;}
+h1{font-family:'Playfair Display';font-size:30px;margin-bottom:6px;text-align:center;}
+.sub{color:#8a7d68;font-size:14px;margin-bottom:28px;text-align:center;}
+.card{background:#fbf5ea;border:1.5px solid #e3d6bd;border-radius:14px;padding:26px 22px;width:100%;max-width:460px;}
+label{display:block;font-size:13px;font-weight:600;color:#6a5f4d;margin:14px 0 6px;}
+input{width:100%;border:1.5px solid #ddd0b6;border-radius:9px;padding:13px 14px;font-size:16px;background:#fff;}
+.out{margin-top:24px;display:none;}
+.box{background:#fff;border:1.5px dashed #d8b88f;border-radius:10px;padding:14px;font-size:13px;word-break:break-all;color:#5a4632;}
+.msgbox{background:#f3ead9;border-radius:10px;padding:14px;font-size:14px;margin-top:12px;line-height:1.5;}
+button{width:100%;margin-top:14px;background:#c4744e;color:#fff;border:none;border-radius:10px;padding:15px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:14px;cursor:pointer;}
+.copied{color:#5a7d4a;font-weight:600;font-size:13px;text-align:center;margin-top:8px;height:18px;}
+</style></head><body>
+<div class="logo">Madam Aylak · Studio</div>
+<h1>Sipariş Ses Linki</h1>
+<div class="sub">Sipariş no + pet adını gir → hazır mesajı kopyala, Etsy'ye yapıştır</div>
+<div class="card">
+  <label>Sipariş numarası</label>
+  <input id="o" placeholder="örn. 3812994027" inputmode="numeric">
+  <label>Pet adı</label>
+  <input id="n" placeholder="örn. Biscuit">
+  <button onclick="gen()">Link & Mesaj Üret</button>
+  <div class="out" id="out">
+    <label>Hazır müşteri mesajı (kopyala-yapıştır):</label>
+    <div class="msgbox" id="msg"></div>
+    <button onclick="copyMsg()">📋 Mesajı Kopyala</button>
+    <div class="copied" id="cp"></div>
+    <label style="margin-top:16px;">Sadece link:</label>
+    <div class="box" id="link"></div>
+  </div>
+</div>
+<script>
+const BASE="https://emretoy.github.io/madamaylak-player/upload.html";
+function gen(){
+  const o=document.getElementById('o').value.trim().replace(/[^0-9A-Za-z-]/g,'');
+  const n=document.getElementById('n').value.trim();
+  if(!o||!n){alert('Sipariş no ve pet adı gerekli');return;}
+  const link=BASE+"?o="+encodeURIComponent(o)+"&n="+encodeURIComponent(n);
+  const msg="Hi! 🐾 One last thing to bring "+n+"'s soundwave to life — please add a short clip of "+n+"'s sound (bark, meow or snore) here:\n\n"+link+"\n\nA phone voice memo or video works perfectly. Your design will be ready within 24 hours!";
+  document.getElementById('link').textContent=link;
+  document.getElementById('msg').textContent=msg;
+  document.getElementById('out').style.display='block';
+  window._msg=msg;
+}
+function copyMsg(){navigator.clipboard.writeText(window._msg).then(()=>{document.getElementById('cp').textContent='✓ Kopyalandı! Etsy mesajına yapıştır.';});}
+</script></body></html>
