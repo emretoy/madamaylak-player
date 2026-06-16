@@ -32,7 +32,7 @@ button:disabled{opacity:.5;}
     <div class="t">Tap to choose your sound</div>
     <div class="hint">bark · meow · snore — a phone voice memo or video is perfect</div>
   </label>
-  <input id="audio" type="file" accept="audio/*,video/*">
+  <input id="audio" type="file" accept=".mp3,.m4a,.wav,.aac,.ogg,.mp4,.mov,audio/*,video/*">
   <div class="fname" id="fn"></div>
   <button id="btn" disabled>Send my pet's sound</button>
   <div class="msg" id="msg"></div>
@@ -47,11 +47,26 @@ const pet=q.get('n')||'';
 document.getElementById('pn').textContent=pet?(pet+"'s sound"):'';
 const $=id=>document.getElementById(id);
 let file=null;
-$('audio').onchange=e=>{file=e.target.files[0];$('fn').textContent=file?('✓ '+file.name):'';$('btn').disabled=!file;};
+const OKEXT=['mp3','m4a','wav','aac','ogg','oga','mp4','mov','3gp','caf','aiff','aif','flac','webm'];
+const MAXMB=25;
+$('audio').onchange=e=>{
+  const f=e.target.files[0]; const msg=$('msg');
+  file=null; $('fn').textContent=''; $('btn').disabled=true; msg.className='msg'; msg.textContent='';
+  if(!f) return;
+  const ext=(f.name.split('.').pop()||'').toLowerCase();
+  const okType=(f.type.startsWith('audio/')||f.type.startsWith('video/'));
+  if(!OKEXT.includes(ext)&&!okType){
+    msg.className='msg err'; msg.textContent='Please choose an audio or video clip (bark, meow, voice memo).'; return;
+  }
+  if(f.size>MAXMB*1024*1024){
+    msg.className='msg err'; msg.textContent='That file is a bit large — please keep it under '+MAXMB+'MB (a few seconds is plenty).'; return;
+  }
+  file=f; $('fn').textContent='✓ '+f.name; $('btn').disabled=false;
+};
 $('btn').onclick=async()=>{
   if(!file)return; const msg=$('msg'); $('btn').disabled=true; msg.className='msg'; msg.textContent='Uploading…';
   try{
-    const ext=file.name.split('.').pop();
+    const ext=(file.name.split('.').pop()||'dat').toLowerCase().replace(/[^a-z0-9]/g,'');
     await sb.storage.from('pet-uploads').upload(order+'/sound.'+ext,file,{upsert:true});
     const meta=new Blob([JSON.stringify({order,pet,file:file.name,at:new Date().toISOString()})],{type:'application/json'});
     await sb.storage.from('pet-uploads').upload(order+'/info.json',meta,{upsert:true});
