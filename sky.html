@@ -1,0 +1,63 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Night Sky — Madam Aylak</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@0;1&family=Playfair+Display&family=Inter:wght@500;600&family=Great+Vibes&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;background:radial-gradient(125% 80% at 50% 4%,#16294f,#0c1c3e 62%,#081530);
+font-family:Inter;color:#f4ecda;display:flex;flex-direction:column;align-items:center;
+padding:54px 24px 60px;text-align:center;}
+.logo{font-weight:600;letter-spacing:.32em;font-size:11px;color:#c2a35e;text-transform:uppercase;margin-bottom:22px;}
+.kick{font-weight:600;letter-spacing:.46em;font-size:11px;color:#c2a35e;text-transform:uppercase;text-indent:.46em;margin-bottom:8px;}
+.place{font-family:'Playfair Display';font-size:30px;margin-bottom:24px;}
+.sky{width:300px;height:300px;border-radius:50%;overflow:hidden;margin-bottom:8px;
+box-shadow:0 0 0 7px rgba(194,163,94,.5),0 0 50px rgba(20,40,90,.9);background:#0b1a3a;}
+.sky img{width:100%;height:100%;object-fit:cover;display:block;}
+.name{font-family:'Great Vibes';font-size:60px;color:#c2a35e;line-height:1;margin:26px 0 4px;}
+.note{font-family:'Cormorant Garamond';font-style:italic;font-size:20px;color:#9fb0cf;margin-bottom:26px;}
+.meta{display:flex;gap:26px;align-items:center;justify-content:center;margin-bottom:34px;}
+.meta .blk{display:flex;flex-direction:column;}
+.meta .lab{font-weight:600;letter-spacing:.26em;font-size:10px;color:#c2a35e;text-transform:uppercase;margin-bottom:5px;}
+.meta .val{font-family:'Cormorant Garamond';font-size:19px;color:#f4ecda;}
+.meta .dv{width:1px;height:38px;background:#c2a35e;opacity:.4;}
+.card{background:rgba(255,255,255,.05);border:1px solid rgba(194,163,94,.35);border-radius:14px;
+padding:26px 24px;max-width:420px;}
+.card h3{font-family:'Playfair Display';font-size:21px;font-weight:400;margin-bottom:10px;color:#f4ecda;}
+.card p{font-family:'Cormorant Garamond';font-size:18px;line-height:1.5;color:#cdd6e6;margin-bottom:18px;}
+.btn{display:inline-block;background:#c2a35e;color:#0c1c3e;text-decoration:none;font-weight:600;
+letter-spacing:.08em;text-transform:uppercase;font-size:13px;padding:13px 26px;border-radius:9px;}
+.foot{margin-top:36px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#7f8eb0;}
+</style></head><body>
+<div class="logo">Madam Aylak</div>
+<div class="kick">Under These Stars</div>
+<div class="place" id="place">The Night Sky</div>
+<div class="sky" id="skywrap" style="display:none"><img id="skyimg"></div>
+<div class="name" id="name"></div>
+<div class="note" id="note"></div>
+<div class="meta">
+  <div class="blk"><div class="lab">Date</div><div class="val" id="date">—</div></div>
+  <div class="dv"></div>
+  <div class="blk"><div class="lab">Coordinates</div><div class="val" id="coord">—</div></div>
+</div>
+<div class="card">
+  <h3>Is this real?</h3>
+  <p>Yes — every star is placed using its true position from the Hipparcos star catalogue, the same astronomical data planetariums use. Set the same date and place in any free sky app and you'll see the very same sky.</p>
+  <a class="btn" id="verify" href="https://stellarium-web.org/" target="_blank" rel="noopener">See it in Stellarium ↗</a>
+</div>
+<div class="foot">scan · explore · remember</div>
+<script>
+const SB='https://frpfibrdjhpbemjutnwo.supabase.co/storage/v1/object/public/pet-sounds/';
+const q=new URLSearchParams(location.search);
+const $=id=>document.getElementById(id);
+if(q.get('pl'))$('place').textContent=q.get('pl');
+if(q.get('n'))$('name').textContent=q.get('n');
+if(q.get('note'))$('note').textContent=q.get('note');
+if(q.get('dt'))$('date').textContent=q.get('dt');
+const lat=q.get('lat'), lon=q.get('lon');
+if(lat&&lon){
+  const la=parseFloat(lat), lo=parseFloat(lon);
+  $('coord').textContent=Math.abs(la).toFixed(4)+'°'+(la>=0?'N':'S')+'  '+Math.abs(lo).toFixed(4)+'°'+(lo>=0?'E':'W');
+}
+const slug=q.get('s');
+if(slug){const im=$('skyimg');im.onload=()=>$('skywrap').style.display='block';im.src=SB+slug+'/sky.png';}
+</script></body></html>
