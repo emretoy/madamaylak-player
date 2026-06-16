@@ -6,19 +6,20 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{min-height:100vh;background:radial-gradient(125% 80% at 50% 4%,#16294f,#0c1c3e 62%,#081530);
 font-family:Inter;color:#f4ecda;display:flex;flex-direction:column;align-items:center;
-padding:54px 24px 60px;text-align:center;}
+padding:48px 18px 56px;text-align:center;overflow-x:hidden;}
+.place,.note,.meta,.card{max-width:100%;}
 .logo{font-weight:600;letter-spacing:.32em;font-size:11px;color:#c2a35e;text-transform:uppercase;margin-bottom:22px;}
 .kick{font-weight:600;letter-spacing:.46em;font-size:11px;color:#c2a35e;text-transform:uppercase;text-indent:.46em;margin-bottom:8px;}
 .place{font-family:'Playfair Display';font-size:30px;margin-bottom:24px;}
-.sky{width:300px;height:300px;border-radius:50%;overflow:hidden;margin-bottom:8px;
-box-shadow:0 0 0 7px rgba(194,163,94,.5),0 0 50px rgba(20,40,90,.9);background:#0b1a3a;}
+.sky{width:min(290px,78vw);height:min(290px,78vw);border-radius:50%;overflow:hidden;margin-bottom:8px;
+box-shadow:0 0 0 6px rgba(194,163,94,.5),0 0 50px rgba(20,40,90,.9);background:#0b1a3a;flex:none;}
 .sky img{width:100%;height:100%;object-fit:cover;display:block;}
 .name{font-family:'Great Vibes';font-size:60px;color:#c2a35e;line-height:1;margin:26px 0 4px;}
 .note{font-family:'Cormorant Garamond';font-style:italic;font-size:20px;color:#9fb0cf;margin-bottom:26px;}
-.meta{display:flex;gap:26px;align-items:center;justify-content:center;margin-bottom:34px;}
+.meta{display:flex;gap:20px;align-items:center;justify-content:center;flex-wrap:wrap;margin-bottom:34px;}
 .meta .blk{display:flex;flex-direction:column;}
 .meta .lab{font-weight:600;letter-spacing:.26em;font-size:10px;color:#c2a35e;text-transform:uppercase;margin-bottom:5px;}
-.meta .val{font-family:'Cormorant Garamond';font-size:19px;color:#f4ecda;}
+.meta .val{font-family:'Cormorant Garamond';font-size:18px;color:#f4ecda;white-space:nowrap;}
 .meta .dv{width:1px;height:38px;background:#c2a35e;opacity:.4;}
 .card{background:rgba(255,255,255,.05);border:1px solid rgba(194,163,94,.35);border-radius:14px;
 padding:26px 24px;max-width:420px;}
