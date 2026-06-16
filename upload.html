@@ -1,63 +1,61 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Send Us Your Pet — Madam Aylak</title>
+<title>Add Your Pet's Sound — Madam Aylak</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@500;600&family=Great+Vibes&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;}
-body{min-height:100vh;background:radial-gradient(120% 80% at 50% 0%,#f7efe0,#ecdfc7);font-family:Inter;color:#3a2e23;padding:40px 22px 80px;display:flex;flex-direction:column;align-items:center;}
-.logo{font-weight:600;letter-spacing:.32em;font-size:12px;color:#8a7d68;text-transform:uppercase;margin-bottom:24px;}
+body{min-height:100vh;background:radial-gradient(120% 80% at 50% 0%,#f7efe0,#ecdfc7);font-family:Inter;color:#3a2e23;padding:48px 22px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.logo{font-weight:600;letter-spacing:.32em;font-size:12px;color:#8a7d68;text-transform:uppercase;margin-bottom:22px;}
 h1{font-family:'Playfair Display';font-size:38px;text-align:center;margin-bottom:6px;}
-.sub{font-family:'Playfair Display';font-style:italic;color:#c4744e;font-size:18px;text-align:center;margin-bottom:30px;}
-.card{background:#fbf5ea;border:1.5px solid #e3d6bd;border-radius:14px;padding:26px 22px;width:100%;max-width:440px;box-shadow:0 10px 30px rgba(90,70,50,.10);}
-label{display:block;font-size:13px;font-weight:600;letter-spacing:.04em;color:#6a5f4d;margin:16px 0 6px;}
-input,textarea{width:100%;border:1.5px solid #ddd0b6;border-radius:9px;padding:12px 14px;font-family:Inter;font-size:15px;background:#fff;color:#3a2e23;}
-input[type=file]{padding:10px;background:#f3ead9;}
-.hint{font-size:12px;color:#9a8d76;margin-top:4px;}
-button{width:100%;margin-top:24px;background:#c4744e;color:#fff;border:none;border-radius:10px;padding:16px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;cursor:pointer;box-shadow:0 8px 20px rgba(196,116,78,.35);}
-button:disabled{opacity:.6;}
-.msg{margin-top:18px;text-align:center;font-size:15px;}
+.name{font-family:'Great Vibes';font-size:48px;color:#c4744e;line-height:1;margin-bottom:8px;}
+.sub{font-family:'Playfair Display';font-style:italic;color:#8a7d68;font-size:18px;text-align:center;margin-bottom:32px;max-width:380px;}
+.card{background:#fbf5ea;border:1.5px solid #e3d6bd;border-radius:14px;padding:30px 24px;width:100%;max-width:420px;box-shadow:0 10px 30px rgba(90,70,50,.10);text-align:center;}
+.drop{border:2px dashed #d8b88f;border-radius:12px;padding:30px 16px;background:#f3ead9;cursor:pointer;}
+.drop .ic{font-size:40px;}
+.drop .t{font-weight:600;margin-top:8px;}
+.hint{font-size:12px;color:#9a8d76;margin-top:8px;}
+input[type=file]{display:none;}
+.fname{margin-top:14px;font-size:14px;color:#5a7d4a;font-weight:600;}
+button{width:100%;margin-top:22px;background:#c4744e;color:#fff;border:none;border-radius:10px;padding:16px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;cursor:pointer;box-shadow:0 8px 20px rgba(196,116,78,.35);}
+button:disabled{opacity:.5;}
+.msg{margin-top:16px;font-size:15px;}
 .ok{color:#5a7d4a;} .err{color:#b1492f;}
 .foot{margin-top:30px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#b0a48c;}
 </style></head><body>
 <div class="logo">Madam Aylak</div>
-<h1>Send Us Your Pet</h1>
-<div class="sub">a few details &amp; we'll craft your design 🐾</div>
+<h1>One last thing —</h1>
+<div class="name" id="pn"></div>
+<div class="sub">add a short clip of your pet's sound, and we'll turn it into your soundwave 🐾</div>
 <div class="card">
-  <label>Etsy order number</label>
-  <input id="order" placeholder="e.g. 3812994027">
-  <label>Your pet's name</label>
-  <input id="name" placeholder="e.g. Biscuit">
-  <label>A short phrase (optional)</label>
-  <input id="phrase" placeholder="e.g. his happy bark">
-  <label>Your pet's photo</label>
-  <input id="photo" type="file" accept="image/*">
-  <div class="hint">A clear, well-lit photo works best.</div>
-  <label>Your pet's sound (for soundwave orders)</label>
+  <label class="drop" for="audio">
+    <div class="ic">🎙️</div>
+    <div class="t">Tap to choose your sound</div>
+    <div class="hint">bark · meow · snore — a phone voice memo or video is perfect</div>
+  </label>
   <input id="audio" type="file" accept="audio/*,video/*">
-  <div class="hint">A short clip of their bark, meow or snore. A phone voice memo or video is perfect.</div>
-  <button id="btn">Send to Madam Aylak</button>
+  <div class="fname" id="fn"></div>
+  <button id="btn" disabled>Send my pet's sound</button>
   <div class="msg" id="msg"></div>
 </div>
-<div class="foot">your files are sent securely</div>
+<div class="foot">sent securely to madam aylak</div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const sb=supabase.createClient("https://frpfibrdjhpbemjutnwo.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZycGZpYnJkamhwYmVtanV0bndvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwNjEyODcsImV4cCI6MjA5MTYzNzI4N30.bmUBKUTuxUKscJbXMzXI4fW2CYGydovjAdrfennCj8M");
+const q=new URLSearchParams(location.search);
+const order=(q.get('o')||'').replace(/[^a-zA-Z0-9-]/g,'')||('web-'+Date.now());
+const pet=q.get('n')||'';
+document.getElementById('pn').textContent=pet?(pet+"'s sound"):'';
 const $=id=>document.getElementById(id);
+let file=null;
+$('audio').onchange=e=>{file=e.target.files[0];$('fn').textContent=file?('✓ '+file.name):'';$('btn').disabled=!file;};
 $('btn').onclick=async()=>{
-  const order=($('order').value||'no-order').trim().replace(/[^a-zA-Z0-9-]/g,'')||'no-order';
-  const name=$('name').value.trim(), phrase=$('phrase').value.trim();
-  const photo=$('photo').files[0], audio=$('audio').files[0];
-  const msg=$('msg');
-  if(!name){msg.className='msg err';msg.textContent='Please enter your pet\'s name.';return;}
-  if(!photo&&!audio){msg.className='msg err';msg.textContent='Please add a photo or a sound clip.';return;}
-  $('btn').disabled=true; msg.className='msg'; msg.textContent='Uploading…';
-  const stamp=Date.now(); const base=order+'-'+stamp;
+  if(!file)return; const msg=$('msg'); $('btn').disabled=true; msg.className='msg'; msg.textContent='Uploading…';
   try{
-    const meta=new Blob([JSON.stringify({order,name,phrase,at:new Date().toISOString()})],{type:'application/json'});
-    await sb.storage.from('pet-uploads').upload(base+'/info.json',meta);
-    if(photo){const e=photo.name.split('.').pop();await sb.storage.from('pet-uploads').upload(base+'/photo.'+e,photo);}
-    if(audio){const e=audio.name.split('.').pop();await sb.storage.from('pet-uploads').upload(base+'/sound.'+e,audio);}
-    msg.className='msg ok'; msg.innerHTML='✓ Thank you! We\'ve received your pet.<br>Your design will be ready within 24 hours. 🐾';
-  }catch(err){msg.className='msg err';msg.textContent='Something went wrong — please try again or message us on Etsy.';$('btn').disabled=false;}
+    const ext=file.name.split('.').pop();
+    await sb.storage.from('pet-uploads').upload(order+'/sound.'+ext,file,{upsert:true});
+    const meta=new Blob([JSON.stringify({order,pet,file:file.name,at:new Date().toISOString()})],{type:'application/json'});
+    await sb.storage.from('pet-uploads').upload(order+'/info.json',meta,{upsert:true});
+    msg.className='msg ok'; msg.innerHTML='✓ Got it! Your soundwave will be ready within 24 hours. 🐾';
+  }catch(err){msg.className='msg err';msg.textContent='Something went wrong — please try again.';$('btn').disabled=false;}
 };
 </script></body></html>
