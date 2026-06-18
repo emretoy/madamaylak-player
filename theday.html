@@ -1,0 +1,58 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>That Day — Madam Aylak</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Cormorant+Garamond:ital@0;1&family=Inter:wght@500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;background:radial-gradient(120% 80% at 50% 0%,#f4ecda,#e9dcc2);
+font-family:Inter;color:#4a3a28;display:flex;flex-direction:column;align-items:center;
+padding:48px 18px 56px;text-align:center;overflow-x:hidden;}
+.logo{font-weight:600;letter-spacing:.32em;font-size:11px;color:#9a8669;text-transform:uppercase;margin-bottom:18px;}
+.kick{font-weight:600;letter-spacing:.42em;font-size:11px;color:#9a8669;text-transform:uppercase;text-indent:.42em;margin-bottom:6px;}
+.date{font-family:'Playfair Display';font-weight:700;font-size:40px;line-height:1.05;}
+.place{font-family:'Cormorant Garamond';font-style:italic;font-size:21px;color:#9c6f47;margin-top:2px;margin-bottom:30px;}
+.card{width:100%;max-width:440px;background:#fffdf8;border:1.5px solid rgba(156,111,71,.3);border-radius:16px;
+padding:24px 22px;margin-bottom:22px;box-shadow:0 8px 24px rgba(74,58,40,.08);}
+.cl{font-weight:600;letter-spacing:.26em;font-size:11px;text-transform:uppercase;color:#9c6f47;margin-bottom:6px;}
+.song{font-family:'Playfair Display';font-weight:600;font-size:22px;color:#4a3a28;margin-bottom:16px;}
+iframe{border:none;border-radius:12px;width:100%;}
+.btn{display:inline-flex;align-items:center;gap:8px;background:#9c6f47;color:#fffdf8;text-decoration:none;
+font-weight:600;letter-spacing:.06em;font-size:15px;padding:15px 30px;border-radius:11px;margin-top:6px;
+box-shadow:0 8px 20px rgba(156,111,71,.32);}
+.skytxt{font-family:'Cormorant Garamond';font-size:19px;color:#7a6f58;margin-bottom:16px;line-height:1.4;}
+.foot{margin-top:24px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#b3a98f;}
+</style></head><body>
+<div class="logo">Madam Aylak</div>
+<div class="kick" id="kick">That Day</div>
+<div class="date" id="date">—</div>
+<div class="place" id="place"></div>
+<div class="card" id="songcard" style="display:none">
+  <div class="cl">The song that was playing</div>
+  <div class="song" id="song"></div>
+  <div id="spwrap"></div>
+</div>
+<div class="card" id="skycard" style="display:none">
+  <div class="cl">The sky that night</div>
+  <div class="skytxt">See exactly where every star was — the real night sky of that evening.</div>
+  <a class="btn" id="skybtn" href="#" target="_blank" rel="noopener">✦ Explore the night sky</a>
+</div>
+<div class="foot">Madam Aylak &middot; A Real Day, Relived</div>
+<script>
+const q=new URLSearchParams(location.search);
+const $=id=>document.getElementById(id);
+if(q.get('k'))$('kick').textContent=q.get('k');
+if(q.get('dt'))$('date').textContent=q.get('dt');
+if(q.get('pl'))$('place').textContent=q.get('pl');
+const sp=q.get('sp'); // spotify track id
+if(sp){
+  $('songcard').style.display='block';
+  $('song').textContent=q.get('song')||'';
+  $('spwrap').innerHTML=`<iframe src="https://open.spotify.com/embed/track/${sp}" height="152" allow="encrypted-media"></iframe>`;
+}else if(q.get('song')){
+  $('songcard').style.display='block';
+  $('song').textContent=q.get('song');
+  $('spwrap').innerHTML=`<a class="btn" href="https://open.spotify.com/search/${encodeURIComponent(q.get('song'))}" target="_blank" rel="noopener">▶ Listen on Spotify</a>`;
+}
+const sky=q.get('sky');
+if(sky){$('skycard').style.display='block';$('skybtn').href=decodeURIComponent(sky);}
+</script></body></html>
