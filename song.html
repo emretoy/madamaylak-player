@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Our Song — Madam Aylak</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Cormorant+Garamond:ital@1&family=Inter:wght@500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;background:radial-gradient(120% 80% at 50% 0%,#f4eef0,#e7dde2);
+font-family:Inter;color:#3a2e35;display:flex;flex-direction:column;align-items:center;
+padding:48px 18px 56px;text-align:center;overflow-x:hidden;}
+.logo{font-weight:600;letter-spacing:.32em;font-size:11px;color:#9a8693;text-transform:uppercase;margin-bottom:20px;}
+.pho{width:min(190px,50vw);height:min(190px,50vw);border-radius:50%;object-fit:cover;object-position:50% 38%;
+border:6px solid #fff;box-shadow:0 10px 28px rgba(58,46,53,.22);margin-bottom:18px;flex:none;display:none;}
+.kick{font-weight:600;letter-spacing:.4em;font-size:11px;color:#9a8693;text-transform:uppercase;text-indent:.4em;}
+.title{font-family:'Great Vibes';font-size:58px;color:#7a5c8a;line-height:1;margin:4px 0 6px;}
+.song{font-family:'Playfair Display';font-weight:600;font-size:20px;color:#3a2e35;margin-bottom:18px;}
+.spwrap{width:100%;max-width:420px;margin-bottom:18px;}
+iframe{border:none;border-radius:12px;width:100%;}
+.msg{font-family:'Cormorant Garamond';font-style:italic;font-size:22px;line-height:1.45;color:#6a5a62;max-width:400px;margin-top:6px;}
+.foot{margin-top:30px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#b3a3ad;}
+</style></head><body>
+<div class="logo">Madam Aylak</div>
+<img class="pho" id="pho">
+<div class="kick" id="kick">Our Song</div>
+<div class="title" id="title"></div>
+<div class="song" id="songt"></div>
+<div class="spwrap" id="spwrap"></div>
+<div class="msg" id="msg"></div>
+<div class="foot">scan &middot; play &middot; remember</div>
+<script>
+const SB='https://frpfibrdjhpbemjutnwo.supabase.co/storage/v1/object/public/pet-sounds/';
+const q=new URLSearchParams(location.search);
+const slug=q.get('s')||'';
+const $=id=>document.getElementById(id);
+async function load(){
+  if(!slug)return;
+  const im=$('pho');im.onload=()=>im.style.display='block';im.src=SB+slug+'/photo.jpg';
+  let d;try{d=await(await fetch(SB+slug+'/song.json',{cache:'no-store'})).json();}catch(e){return;}
+  if(d.sub)$('kick').textContent=d.sub;
+  if(d.title)$('title').textContent=d.title;
+  if(d.song)$('songt').textContent=d.song;
+  if(d.msg)$('msg').textContent='“'+d.msg+'”';
+  if(d.sp)$('spwrap').innerHTML=`<iframe src="https://open.spotify.com/embed/track/${d.sp}" height="152" allow="encrypted-media"></iframe>`;
+}
+load();
+</script></body></html>
