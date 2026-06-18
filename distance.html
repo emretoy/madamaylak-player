@@ -7,7 +7,9 @@
 body{min-height:100vh;background:radial-gradient(120% 80% at 50% 0%,#f1f4f6,#e0e8ee);
 font-family:Inter;color:#2c3e50;display:flex;flex-direction:column;align-items:center;
 padding:46px 18px 56px;text-align:center;overflow-x:hidden;}
-.logo{font-weight:600;letter-spacing:.32em;font-size:11px;color:#8a9aa6;text-transform:uppercase;margin-bottom:16px;}
+.logo{font-weight:600;letter-spacing:.32em;font-size:11px;color:#8a9aa6;text-transform:uppercase;margin-bottom:14px;}
+.pho{width:min(150px,40vw);height:min(150px,40vw);border-radius:50%;object-fit:cover;object-position:50% 38%;
+border:6px solid #fff;box-shadow:0 8px 22px rgba(44,62,80,.2);margin-bottom:14px;flex:none;display:none;}
 .name{font-family:'Great Vibes';font-size:50px;color:#4a6b8a;line-height:1;}
 .kick{font-weight:600;letter-spacing:.34em;font-size:10px;color:#8a9aa6;text-transform:uppercase;margin-top:6px;margin-bottom:26px;}
 .cities{display:flex;gap:14px;width:100%;max-width:460px;justify-content:center;}
@@ -26,6 +28,7 @@ padding:46px 18px 56px;text-align:center;overflow-x:hidden;}
 .foot{margin-top:30px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#a8b6c0;}
 </style></head><body>
 <div class="logo">Madam Aylak</div>
+<img class="pho" id="pho">
 <div class="name" id="name"></div>
 <div class="kick">Miles Apart, Always Close</div>
 <div class="cities">
@@ -45,6 +48,9 @@ function rad(d){return d*Math.PI/180;}
 function haversine(a,b,c,d){const R=6371,dla=rad(c-a),dlo=rad(d-b);const h=Math.sin(dla/2)**2+Math.cos(rad(a))*Math.cos(rad(c))*Math.sin(dlo/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
 if(q.get('na'))$('name').textContent=q.get('na');
 if(q.get('msg'))$('msg').textContent='“'+q.get('msg')+'”';
+const slug=q.get('s');
+if(slug){const SB='https://frpfibrdjhpbemjutnwo.supabase.co/storage/v1/object/public/pet-sounds/';
+  const im=$('pho');im.onload=()=>im.style.display='block';im.src=SB+slug+'/photo.jpg';}
 const la1=+q.get('la1'),lo1=+q.get('lo1'),la2=+q.get('la2'),lo2=+q.get('lo2');
 $('cn1').textContent=q.get('ca')||'';$('cn2').textContent=q.get('cb')||'';
 if(la1&&la2){$('dist').textContent=Math.round(haversine(la1,lo1,la2,lo2)).toLocaleString()+' km';}
