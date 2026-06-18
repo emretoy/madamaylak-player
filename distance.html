@@ -1,0 +1,65 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Same Sky — Madam Aylak</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600;700&family=Cormorant+Garamond:ital@1&family=Inter:wght@500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;background:radial-gradient(120% 80% at 50% 0%,#f1f4f6,#e0e8ee);
+font-family:Inter;color:#2c3e50;display:flex;flex-direction:column;align-items:center;
+padding:46px 18px 56px;text-align:center;overflow-x:hidden;}
+.logo{font-weight:600;letter-spacing:.32em;font-size:11px;color:#8a9aa6;text-transform:uppercase;margin-bottom:16px;}
+.name{font-family:'Great Vibes';font-size:50px;color:#4a6b8a;line-height:1;}
+.kick{font-weight:600;letter-spacing:.34em;font-size:10px;color:#8a9aa6;text-transform:uppercase;margin-top:6px;margin-bottom:26px;}
+.cities{display:flex;gap:14px;width:100%;max-width:460px;justify-content:center;}
+.city{flex:1;background:#fff;border:1.5px solid rgba(74,107,138,.25);border-radius:16px;padding:22px 14px;box-shadow:0 8px 22px rgba(44,62,80,.08);}
+.cn{font-family:'Playfair Display';font-weight:600;font-size:21px;color:#2c3e50;}
+.wx{font-size:42px;margin:8px 0 2px;line-height:1;}
+.tp{font-family:'Playfair Display';font-weight:700;font-size:30px;color:#4a6b8a;}
+.cond{font-size:12px;color:#8a9aa6;margin-top:2px;text-transform:capitalize;}
+.clk{font-family:'Inter';font-weight:600;font-size:26px;color:#2c3e50;margin-top:12px;letter-spacing:.04em;}
+.ampm{font-size:13px;color:#8a9aa6;}
+.mid{margin:18px 0;font-size:26px;color:#4a6b8a;}
+.dist{font-family:'Playfair Display';font-weight:700;font-size:34px;color:#4a6b8a;}
+.distl{font-weight:600;letter-spacing:.28em;font-size:10px;text-transform:uppercase;color:#8a9aa6;margin-top:4px;}
+.sky{font-family:'Cormorant Garamond';font-style:italic;font-size:24px;color:#2c3e50;margin-top:22px;max-width:400px;line-height:1.4;}
+.msg{font-family:'Cormorant Garamond';font-style:italic;font-size:20px;color:#6a7a86;margin-top:12px;max-width:400px;}
+.foot{margin-top:30px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#a8b6c0;}
+</style></head><body>
+<div class="logo">Madam Aylak</div>
+<div class="name" id="name"></div>
+<div class="kick">Miles Apart, Always Close</div>
+<div class="cities">
+  <div class="city"><div class="cn" id="cn1">—</div><div class="wx" id="wx1">·</div><div class="tp" id="tp1"></div><div class="cond" id="cd1"></div><div class="clk" id="ck1"></div></div>
+  <div class="city"><div class="cn" id="cn2">—</div><div class="wx" id="wx2">·</div><div class="tp" id="tp2"></div><div class="cond" id="cd2"></div><div class="clk" id="ck2"></div></div>
+</div>
+<div class="mid">✈</div>
+<div class="dist" id="dist"></div><div class="distl">apart, right now</div>
+<div class="sky" id="sky">but right now, you're both under the same sky 🌙</div>
+<div class="msg" id="msg"></div>
+<div class="foot">scan &middot; same sky &middot; always</div>
+<script>
+const q=new URLSearchParams(location.search);
+const $=id=>document.getElementById(id);
+const WMO={0:['Clear','☀️'],1:['Mainly clear','🌤️'],2:['Partly cloudy','⛅'],3:['Overcast','☁️'],45:['Foggy','🌫️'],48:['Foggy','🌫️'],51:['Drizzle','🌦️'],53:['Drizzle','🌦️'],55:['Drizzle','🌦️'],61:['Rain','🌧️'],63:['Rain','🌧️'],65:['Heavy rain','🌧️'],71:['Snow','🌨️'],73:['Snow','🌨️'],75:['Snow','❄️'],80:['Showers','🌦️'],81:['Showers','🌧️'],82:['Showers','🌧️'],95:['Storm','⛈️'],96:['Storm','⛈️'],99:['Storm','⛈️']};
+function rad(d){return d*Math.PI/180;}
+function haversine(a,b,c,d){const R=6371,dla=rad(c-a),dlo=rad(d-b);const h=Math.sin(dla/2)**2+Math.cos(rad(a))*Math.cos(rad(c))*Math.sin(dlo/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
+if(q.get('na'))$('name').textContent=q.get('na');
+if(q.get('msg'))$('msg').textContent='“'+q.get('msg')+'”';
+const la1=+q.get('la1'),lo1=+q.get('lo1'),la2=+q.get('la2'),lo2=+q.get('lo2');
+$('cn1').textContent=q.get('ca')||'';$('cn2').textContent=q.get('cb')||'';
+if(la1&&la2){$('dist').textContent=Math.round(haversine(la1,lo1,la2,lo2)).toLocaleString()+' km';}
+let tz=[null,null];
+async function wx(i,la,lo){
+  try{const d=await(await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${la}&longitude=${lo}&current=temperature_2m,weather_code&timezone=auto`)).json();
+    const c=d.current;tz[i]=d.timezone;
+    const w=WMO[c.weather_code]||['',''];
+    $('wx'+(i+1)).textContent=w[1];$('tp'+(i+1)).textContent=Math.round(c.temperature_2m)+'°';$('cd'+(i+1)).textContent=w[0];
+  }catch(e){}
+}
+function clocks(){
+  tz.forEach((z,i)=>{if(!z)return;
+    const t=new Date().toLocaleTimeString('en-GB',{timeZone:z,hour:'2-digit',minute:'2-digit',hour12:true});
+    $('ck'+(i+1)).textContent=t;});
+}
+if(la1){wx(0,la1,lo1);wx(1,la2,lo2);setInterval(clocks,1000);clocks();}
+</script></body></html>
