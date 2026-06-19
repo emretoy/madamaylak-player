@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>It's Alive! — Madam Aylak</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Caveat:wght@700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:linear-gradient(165deg,#bfe6f7,#dff0e4 45%,#fff3d6);color:#3b4a8a;font-family:Fredoka;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:26px 18px 40px;overflow-x:hidden;}
+.kick{font-weight:700;letter-spacing:.18em;font-size:13px;text-transform:uppercase;color:#ff8d6b;margin:6px 0 4px;}
+.title{font-weight:700;font-size:34px;text-shadow:2px 2px 0 #ffd24a;margin-bottom:16px;}
+.card{position:relative;width:min(420px,92vw);aspect-ratio:3/4;border:12px solid #fff;border-radius:24px;overflow:hidden;box-shadow:0 20px 44px rgba(60,74,138,.3);}
+video{width:100%;height:100%;object-fit:cover;display:block;}
+.play{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:5;cursor:pointer;background:rgba(40,60,120,.32);transition:opacity .5s;}
+.pbtn{width:80px;height:80px;border-radius:50%;border:3px solid #fff;display:flex;align-items:center;justify-content:center;background:rgba(255,210,74,.85);box-shadow:0 8px 20px rgba(0,0,0,.25);}
+.pbtn:after{content:'';border-left:24px solid #3b4a8a;border-top:15px solid transparent;border-bottom:15px solid transparent;margin-left:7px;}
+.phint{margin-top:16px;font-weight:600;font-size:14px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.3);}
+.by{font-family:Caveat;font-weight:700;font-size:30px;margin-top:18px;}
+.by b{color:#ff8d6b;}
+.note{margin-top:8px;max-width:360px;text-align:center;font-family:Caveat;font-weight:700;font-size:24px;color:#5a9e6f;}
+.foot{margin-top:22px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8aa0c8;}
+</style></head><body>
+<div class="kick">★ It's Alive! ★</div><div class="title">Mia's Monster</div>
+<div class="card"><video id="vid" src="demo.mp4" loop playsinline muted></video>
+<div class="play" id="play"><div class="pbtn"></div><div class="phint">tap to wake it up!</div></div></div>
+<div class="by">drawn by <b>Mia</b>, age 5</div>
+<div class="note">A live demo — your child's drawing comes to life!</div>
+<div class="foot">Madam Aylak</div>
+<script>const vid=document.getElementById('vid');document.getElementById('play').addEventListener('click',function(){vid.play();this.style.opacity=0;setTimeout(()=>this.style.display='none',500);});</script>
+</body></html>
