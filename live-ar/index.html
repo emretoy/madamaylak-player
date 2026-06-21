@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>See It Come Alive — Madam Aylak</title>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Cormorant+Garamond:ital@1&family=Inter:wght@500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0e1424;color:#f3ecda;font-family:Inter;min-height:100vh;display:flex;flex-direction:column;
+ align-items:center;padding:22px 16px 36px;
+ background-image:radial-gradient(120% 80% at 50% 0%,#1a2440,#0e1424 70%);}
+.logo{font-weight:600;letter-spacing:.4em;font-size:11px;color:#c2a35e;text-transform:uppercase;margin-bottom:4px;}
+h1{font-family:'Playfair Display';font-weight:700;font-size:30px;text-align:center;}
+.sub{font-family:'Cormorant Garamond';font-style:italic;color:#9fb0cf;font-size:18px;margin-bottom:16px;text-align:center;}
+model-viewer{width:min(440px,94vw);height:62vh;background:radial-gradient(circle at 50% 40%,#22305a,#0e1424 75%);
+ border-radius:18px;border:1px solid rgba(194,163,94,.25);box-shadow:0 24px 60px rgba(0,0,0,.6);--poster-color:transparent;}
+.arbtn{margin-top:18px;background:#c2a35e;color:#1a1408;border:none;border-radius:12px;padding:17px 30px;
+ font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:15px;display:flex;align-items:center;gap:10px;
+ box-shadow:0 10px 26px rgba(194,163,94,.4);cursor:pointer;}
+.hint{margin-top:16px;font-size:13px;color:#9fb0cf;text-align:center;max-width:360px;line-height:1.5;}
+.steps{margin-top:8px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#6f7d9c;text-align:center;}
+.foot{margin-top:22px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#55607a;}
+</style></head><body>
+<div class="logo">Madam Aylak</div>
+<h1>Watch it come alive</h1>
+<div class="sub">no app — just your camera</div>
+<model-viewer id="mv" src="character.glb" ios-src="character.usdz"
+  ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto"
+  camera-controls auto-rotate touch-action="pan-y" shadow-intensity="1"
+  alt="A character that comes alive in your room">
+  <button slot="ar-button" class="arbtn">✦ Bring it into your room</button>
+</model-viewer>
+<div class="hint">Spin it with your finger. Then tap <b>"Bring it into your room"</b> — point your phone at the floor and it appears, life-size, right there.</div>
+<div class="steps">tap · point at the floor · walk around it</div>
+<div class="foot">Madam Aylak · Living Magic</div>
+<script>
+const mv=document.getElementById('mv');
+mv.addEventListener('ar-status',e=>{ if(e.detail.status==='failed'){
+ document.querySelector('.hint').innerHTML='Your phone opened AR but couldn\\'t place it — try in good light, pointing at the floor. (Works best on a real phone, not desktop.)';}});
+</script></body></html>
