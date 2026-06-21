@@ -1,0 +1,67 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Add Your Journey Photos — Madam Aylak</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;background:radial-gradient(120% 80% at 50% 0%,#f7efe0,#ecdfc7);font-family:Inter;color:#3a2e23;padding:44px 22px;display:flex;flex-direction:column;align-items:center;}
+.logo{font-weight:600;letter-spacing:.32em;font-size:12px;color:#8a7d68;text-transform:uppercase;margin-bottom:18px;}
+h1{font-family:'Playfair Display';font-size:32px;text-align:center;margin-bottom:6px;}
+.sub{font-family:'Playfair Display';font-style:italic;color:#8a7d68;font-size:16px;text-align:center;margin-bottom:26px;max-width:420px;}
+.card{background:#fbf5ea;border:1.5px solid #e3d6bd;border-radius:14px;padding:26px 22px;width:100%;max-width:460px;box-shadow:0 10px 30px rgba(90,70,50,.10);}
+label.fld{display:block;font-weight:600;font-size:13px;margin:18px 0 7px;color:#5a4d3a;}
+label.fld:first-child{margin-top:0;}
+input[type=text]{width:100%;border:1.5px solid #e0d2b6;border-radius:9px;padding:13px 14px;font-size:15px;background:#fff;font-family:Inter;}
+.drop{display:block;border:2px dashed #d8b88f;border-radius:12px;padding:24px 16px;background:#f3ead9;cursor:pointer;text-align:center;}
+.drop .ic{font-size:36px;}.drop .t{font-weight:600;margin-top:6px;}
+.hint{font-size:12px;color:#9a8d76;margin-top:6px;}
+input[type=file]{display:none;}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:14px;}
+.thumb{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:1px solid #e0d2b6;}
+.thumb img{width:100%;height:100%;object-fit:cover;}
+.thumb .n{position:absolute;left:3px;top:3px;background:#c4744e;color:#fff;font-size:11px;font-weight:600;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+button{width:100%;margin-top:22px;background:#c4744e;color:#fff;border:none;border-radius:10px;padding:16px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;cursor:pointer;box-shadow:0 8px 20px rgba(196,116,78,.35);}
+button:disabled{opacity:.5;cursor:default;}
+.msg{margin-top:16px;font-size:15px;text-align:center;}.ok{color:#5a7d4a;}.err{color:#b1492f;}
+.foot{margin-top:26px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#b0a48c;}
+</style></head><body>
+<div class="logo">Madam Aylak</div>
+<h1>Your journey, place by place</h1>
+<div class="sub">upload one photo per place — in the same order they're listed on your map — and the song that played along the way ✨</div>
+<div class="card">
+  <label class="fld">Your Etsy order number</label>
+  <input id="order" type="text" placeholder="e.g. 1234567890 (on your Etsy receipt)">
+  <label class="fld">Your photos — one per place, in order</label>
+  <label class="drop" for="photos"><div class="ic">📷</div><div class="t">Tap to choose your photos</div>
+    <div class="hint">select up to 10 · the order you pick them = the order on your map</div></label>
+  <input id="photos" type="file" accept="image/*" multiple>
+  <div class="grid" id="grid"></div>
+  <label class="fld">Your song</label>
+  <input id="song" type="text" placeholder="paste a YouTube or Spotify link">
+  <button id="btn" disabled>Send my journey to Madam Aylak</button>
+  <div class="msg" id="msg"></div>
+</div>
+<div class="foot">sent securely · delivered within 24 hours</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const sb=supabase.createClient("https://frpfibrdjhpbemjutnwo.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZycGZpYnJkamhwYmVtanV0bndvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwNjEyODcsImV4cCI6MjA5MTYzNzI4N30.bmUBKUTuxUKscJbXMzXI4fW2CYGydovjAdrfennCj8M");
+const q=new URLSearchParams(location.search);const $=id=>document.getElementById(id);
+if(q.get('o'))$('order').value=q.get('o');
+let files=[];
+$('photos').onchange=e=>{files=Array.from(e.target.files).slice(0,10);const g=$('grid');g.innerHTML='';
+ files.forEach((f,i)=>{const d=document.createElement('div');d.className='thumb';
+   const img=document.createElement('img');img.src=URL.createObjectURL(f);
+   const n=document.createElement('div');n.className='n';n.textContent=i+1;d.appendChild(img);d.appendChild(n);g.appendChild(d);});
+ refresh();};
+function refresh(){$('btn').disabled=!(files.length&&$('order').value.trim()&&$('song').value.trim());}
+$('order').oninput=refresh;$('song').oninput=refresh;
+$('btn').onclick=async()=>{const msg=$('msg');$('btn').disabled=true;msg.className='msg';msg.textContent='Uploading '+files.length+' photos…';
+ try{const order=$('order').value.trim().replace(/[^a-zA-Z0-9-]/g,'');
+  for(let i=0;i<files.length;i++){const f=files[i];const ext=(f.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');
+    await sb.storage.from('pet-uploads').upload('travel/'+order+'/'+String(i+1).padStart(2,'0')+'.'+ext,f,{upsert:true});}
+  const meta=new Blob([JSON.stringify({order,count:files.length,song:$('song').value.trim(),at:new Date().toISOString()})],{type:'application/json'});
+  await sb.storage.from('pet-uploads').upload('travel/'+order+'/info.json',meta,{upsert:true});
+  msg.className='msg ok';msg.innerHTML='✓ Got it — all '+files.length+' photos received! Your map will be ready within 24 hours. ✨';
+ }catch(err){msg.className='msg err';msg.textContent='Something went wrong — please try again.';$('btn').disabled=false;}
+};
+</script></body></html>
