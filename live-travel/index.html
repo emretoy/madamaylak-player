@@ -1,0 +1,63 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Where We've Traveled — Madam Aylak</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Cormorant+Garamond:ital@1&family=Great+Vibes&family=Inter:wght@500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#f4eedd;color:#3a3020;font-family:Inter;display:flex;flex-direction:column;
+ align-items:center;min-height:100vh;overflow-x:hidden;padding:20px 16px 30px;
+ background-image:radial-gradient(120% 80% at 50% 0%,#faf5e6,#e9ddc2 100%);}
+.logo{font-weight:600;letter-spacing:.4em;font-size:11px;color:#bf6a43;text-transform:uppercase;margin:6px 0 2px;}
+.kick{font:600 12px Inter;letter-spacing:.42em;text-transform:uppercase;color:#9a8c72;margin-bottom:16px;}
+.stage{position:relative;width:min(430px,92vw);aspect-ratio:3/4;border-radius:14px;overflow:hidden;
+ box-shadow:0 22px 50px rgba(58,48,32,.32);border:7px solid #fff;}
+.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.band{position:absolute;left:0;right:0;bottom:0;padding:56px 18px 16px;
+ background:linear-gradient(to top,rgba(40,30,18,.82),transparent);text-align:center;}
+.names{font-family:'Great Vibes';font-size:42px;color:#f0d9a8;line-height:1;}
+.sub{font-family:'Cormorant Garamond';font-style:italic;font-size:17px;color:#e9ddc2;margin-top:2px;}
+.play{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+ background:rgba(40,30,18,.42);cursor:pointer;transition:opacity .6s;}
+.pbtn{width:80px;height:80px;border-radius:50%;border:2px solid #f0d9a8;display:flex;align-items:center;
+ justify-content:center;background:rgba(240,217,168,.18);}
+.pbtn:after{content:'';border-left:23px solid #fff;border-top:14px solid transparent;
+ border-bottom:14px solid transparent;margin-left:7px;}
+.phint{margin-top:15px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#f0d9a8;}
+.bars{display:flex;gap:4px;align-items:flex-end;height:30px;margin-top:20px;}
+.bars i{width:4px;background:linear-gradient(to top,#bf6a43,#dca06a);border-radius:2px;height:5px;}
+.meta{margin-top:14px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#9a8c72;text-align:center;}
+.cap{margin-top:6px;font-family:'Cormorant Garamond';font-style:italic;font-size:15px;color:#bf6a43;}
+.foot{margin-top:18px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#a99a7e;}
+</style></head><body>
+ <div class="logo">Madam Aylak</div>
+ <div class="kick">Where We've Traveled</div>
+ <div class="stage" id="stage">
+   <img id="art" src="couple.jpg"/>
+   <div class="band"><div class="names">Emma &amp; James</div><div class="sub">every place we have wandered together</div></div>
+   <div class="play" id="play"><div class="pbtn"></div><div class="phint">tap to relive our journeys</div></div>
+ </div>
+ <div class="bars" id="bars"></div>
+ <div class="meta">6 places · 6 countries · 5,263 km together</div>
+ <div class="cap">your song, kept forever</div>
+ <div class="foot">Madam Aylak · Living Travel Map</div>
+<audio id="aud" src="song.mp3" crossorigin="anonymous" preload="auto"></audio>
+<script>
+const bars=document.getElementById('bars');for(let i=0;i<30;i++)bars.appendChild(document.createElement('i'));
+const bA=[...bars.children];const aud=document.getElementById('aud');
+let ac,an,freq,started=false,reactive=false;
+function initAudio(){try{ac=new (window.AudioContext||window.webkitAudioContext)();
+ const s=ac.createMediaElementSource(aud);an=ac.createAnalyser();an.fftSize=128;
+ freq=new Uint8Array(an.frequencyBinCount);s.connect(an);an.connect(ac.destination);reactive=true;}catch(e){reactive=false;}}
+function frame(ts){
+ if(reactive&&an){an.getByteFrequencyData(freq);
+   for(let i=0;i<bA.length;i++){const v=(freq[i*2]||0)/255;bA[i].style.height=(5+v*26)+'px';}}
+ else{const t=ts/1000;for(let i=0;i<bA.length;i++){
+   const v=(Math.sin(t*5+i*0.5)*0.5+0.5)*(0.4+0.6*Math.abs(Math.sin(t*1.1+i)));bA[i].style.height=(5+v*22)+'px';}}
+ if(!aud.paused) requestAnimationFrame(frame);}
+document.getElementById('play').addEventListener('click',function(){
+ if(!started){initAudio();started=true;}
+ if(ac&&ac.state==='suspended')ac.resume();
+ aud.play();this.style.opacity=0;setTimeout(()=>this.style.display='none',600);
+ requestAnimationFrame(frame);});
+aud.addEventListener('ended',()=>{for(const b of bA)b.style.height='5px';});
+</script></body></html>
