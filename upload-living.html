@@ -1,0 +1,68 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Add Your Photo & Song — Madam Aylak</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@500;600&family=Great+Vibes&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;background:radial-gradient(120% 80% at 50% 0%,#f7efe0,#ecdfc7);font-family:Inter;color:#3a2e23;padding:48px 22px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.logo{font-weight:600;letter-spacing:.32em;font-size:12px;color:#8a7d68;text-transform:uppercase;margin-bottom:20px;}
+h1{font-family:'Playfair Display';font-size:34px;text-align:center;margin-bottom:6px;}
+.sub{font-family:'Playfair Display';font-style:italic;color:#8a7d68;font-size:17px;text-align:center;margin-bottom:28px;max-width:400px;}
+.card{background:#fbf5ea;border:1.5px solid #e3d6bd;border-radius:14px;padding:28px 24px;width:100%;max-width:440px;box-shadow:0 10px 30px rgba(90,70,50,.10);}
+label.fld{display:block;font-weight:600;font-size:13px;letter-spacing:.04em;margin:18px 0 7px;color:#5a4d3a;}
+label.fld:first-child{margin-top:0;}
+input[type=text]{width:100%;border:1.5px solid #e0d2b6;border-radius:9px;padding:13px 14px;font-size:15px;background:#fff;font-family:Inter;}
+.drop{display:block;border:2px dashed #d8b88f;border-radius:12px;padding:26px 16px;background:#f3ead9;cursor:pointer;text-align:center;}
+.drop .ic{font-size:38px;}.drop .t{font-weight:600;margin-top:6px;}
+.hint{font-size:12px;color:#9a8d76;margin-top:6px;}
+input[type=file]{display:none;}
+.fname{margin-top:12px;font-size:14px;color:#5a7d4a;font-weight:600;text-align:center;}
+button{width:100%;margin-top:24px;background:#c4744e;color:#fff;border:none;border-radius:10px;padding:16px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;cursor:pointer;box-shadow:0 8px 20px rgba(196,116,78,.35);}
+button:disabled{opacity:.5;cursor:default;}
+.msg{margin-top:16px;font-size:15px;text-align:center;}
+.ok{color:#5a7d4a;}.err{color:#b1492f;}
+.foot{margin-top:28px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#b0a48c;}
+</style></head><body>
+<div class="logo">Madam Aylak</div>
+<h1>One last thing —</h1>
+<div class="sub">add the photo and the song that go behind your scan code, and we'll bring it to life ✨</div>
+<div class="card">
+  <label class="fld">Your Etsy order number</label>
+  <input id="order" type="text" placeholder="e.g. 1234567890 (on your Etsy receipt)">
+  <label class="fld">Your photo</label>
+  <label class="drop" for="photo"><div class="ic">📷</div><div class="t">Tap to choose your photo</div>
+    <div class="hint">a favourite photo of the two of you — JPG or PNG</div></label>
+  <input id="photo" type="file" accept="image/*">
+  <div class="fname" id="fn"></div>
+  <label class="fld">Your song</label>
+  <input id="song" type="text" placeholder="paste a YouTube or Spotify link">
+  <label class="fld">Names, date &amp; place (optional)</label>
+  <input id="note" type="text" placeholder="e.g. Emma &amp; James — 9 June 2019 — Florence">
+  <button id="btn" disabled>Send it to Madam Aylak</button>
+  <div class="msg" id="msg"></div>
+</div>
+<div class="foot">sent securely · delivered within 24 hours</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const sb=supabase.createClient("https://frpfibrdjhpbemjutnwo.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZycGZpYnJkamhwYmVtanV0bndvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwNjEyODcsImV4cCI6MjA5MTYzNzI4N30.bmUBKUTuxUKscJbXMzXI4fW2CYGydovjAdrfennCj8M");
+const q=new URLSearchParams(location.search);
+const $=id=>document.getElementById(id);
+if(q.get('o'))$('order').value=q.get('o');
+let file=null;
+$('photo').onchange=e=>{const f=e.target.files[0];const msg=$('msg');file=null;$('fn').textContent='';msg.textContent='';
+ if(!f)return;
+ if(!f.type.startsWith('image/')){msg.className='msg err';msg.textContent='Please choose an image (JPG or PNG).';return;}
+ if(f.size>25*1024*1024){msg.className='msg err';msg.textContent='That photo is large — please keep it under 25MB.';return;}
+ file=f;$('fn').textContent='✓ '+f.name;refresh();};
+function refresh(){$('btn').disabled=!(file&&$('order').value.trim()&&$('song').value.trim());}
+$('order').oninput=refresh;$('song').oninput=refresh;
+$('btn').onclick=async()=>{const msg=$('msg');$('btn').disabled=true;msg.className='msg';msg.textContent='Uploading…';
+ try{const order=$('order').value.trim().replace(/[^a-zA-Z0-9-]/g,'');
+  const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');
+  await sb.storage.from('pet-uploads').upload('living/'+order+'/photo.'+ext,file,{upsert:true});
+  const meta=new Blob([JSON.stringify({order,song:$('song').value.trim(),note:$('note').value.trim(),file:file.name,at:new Date().toISOString()})],{type:'application/json'});
+  await sb.storage.from('pet-uploads').upload('living/'+order+'/info.json',meta,{upsert:true});
+  msg.className='msg ok';msg.innerHTML='✓ Got it! Your living keepsake will be ready within 24 hours. ✨';
+ }catch(err){msg.className='msg err';msg.textContent='Something went wrong — please try again.';$('btn').disabled=false;}
+};
+</script></body></html>
